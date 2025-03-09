@@ -1,10 +1,42 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset = "utf-8">
     <title>home</title>
+    <style>
+        #fileInput {
+            display: none;
+        }
+        .choose-button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .choose-button:hover {
+            background-color: #0056b3;
+        }
+      .submit-button {
+        display: inline-block;
+        padding: 10px 12px;
+        background-color: #ff8400;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      .submit-button:hover {
+        background-color: #dd6400;
+      } 
+    </style>
   </head>
   <body>
-    <h1>aaaa</h1>
+    <h1>File upload</h1>
+    <form id="uploading" enctype=multipart/form-data>
+      <input type="file" name="file" id="fileInput">
+      <label for="fileInput" class="choose-button">Choose File</label>
+      <label class="submit-button">Submit</label>
+      </form>
   </body>
 </html>
