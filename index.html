@@ -1,126 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文件上传到 GitHub</title>
+<!doctype html>
+<html>
+  <head>
+    <meta charset = "utf-8">
+    <title>home</title>
     <style>
-        /* 隐藏默认的文件输入框 */
         #fileInput {
             display: none;
         }
-        /* 自定义按钮样式 */
-        .custom-button {
+        .choose-button {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 10px 15px;
             background-color: #007bff;
             color: white;
             cursor: pointer;
             border-radius: 5px;
         }
-        .custom-button:hover {
+        .choose-button:hover {
             background-color: #0056b3;
         }
-        /* 文件列表样式 */
-        #fileList {
-            margin-top: 20px;
-        }
-        .file-item {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            background-color: #f9f9f9;
-        }
+      .submit-button {
+        display: inline-block;
+        padding: 10px 12px;
+        background-color: #ff8400;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      .submit-button:hover {
+        background-color: #dd6400;
+      } 
     </style>
-</head>
-<body>
-    <h1>文件上传到 GitHub</h1>
-    <form id="uploadForm">
-        <!-- 隐藏的文件输入框 -->
-        <input type="file" name="file" id="fileInput">
-        <!-- 自定义按钮 -->
-        <label for="fileInput" class="custom-button">Choose File</label>
-        <button type="submit">Upload</button>
-    </form>
-    <!-- 文件列表 -->
-    <div id="fileList">
-        <p>已上传的文件：</p>
-    </div>
-    <p id="status"></p>
-
-    <script>
-        const fileInput = document.getElementById('fileInput');
-        const uploadForm = document.getElementById('uploadForm');
-        const fileList = document.getElementById('fileList');
-        const status = document.getElementById('status');
-
-        // GitHub 配置
-        const repoOwner = 'brentiusx64';
-        const repoName = 'brentiusx64.github.io';
-        const branch = '/main/files/'; // 分支名
-        const token = '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'; // 替换为你的 Token
-
-        // 监听表单提交事件
-        uploadForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const file = fileInput.files[0];
-            if (!file) {
-                alert('请选择文件');
-                return;
-            }
-
-            // 读取文件内容
-            const reader = new FileReader();
-            reader.onload = async function() {
-                const content = reader.result.split(',')[1]; // 获取 Base64 编码的内容
-                const filename = file.name;
-
-                try {
-                    // 调用 GitHub API 上传文件
-                    const response = await uploadToGitHub(filename, content);
-                    status.textContent = `文件上传成功: ${response.content.html_url}`;
-
-                    // 更新文件列表
-                    updateFileList(filename);
-                } catch (error) {
-                    status.textContent = `上传失败: ${error.message}`;
-                }
-            };
-            reader.readAsDataURL(file); // 将文件转换为 Base64
-        });
-
-        // 上传文件到 GitHub
-        async function uploadToGitHub(filename, content) {
-            const url = 'https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filename}';
-            const response = await fetch(url, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    message: `上传文件: ${filename}`, // 提交信息
-                    content: content, // Base64 编码的文件内容
-                    branch: branch // 目标分支
-                })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || '上传失败');
-            }
-
-            return response.json();
-        }
-
-        // 更新文件列表
-        function updateFileList(filename) {
-            const fileItem = document.createElement('div');
-            fileItem.className = 'file-item';
-            fileItem.textContent = filename;
-            fileList.appendChild(fileItem);
-        }
-    </script>
-</body>
+  </head>
+  <body>
+    <h1>File upload</h1>
+    <form id="uploading" enctype=multipart/form-data>
+      <input type="file" name="file" id="fileInput">
+      <label for="fileInput" class="choose-button">Choose File</label>
+      <label class="submit-button">Submit</label>
+      </form>
+  </body>
 </html>
